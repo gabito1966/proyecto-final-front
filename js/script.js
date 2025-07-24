@@ -47,7 +47,7 @@ function crearCardProducto(product) {
   card.style.width = '18rem';
   card.id = `product-${product.id}`;
 
-  const imageUrl = `http://localhost:8080${product.image}`;
+  const imageUrl = `http://localhost:8080/${product.image}`;
 
   card.innerHTML = `
     <img src="${imageUrl}" class="card-img-top product-image" alt="${product.name}">
@@ -70,10 +70,10 @@ function crearCardProducto(product) {
       
       <div class="edit-form-container" id="edit-form-${product.id}" style="display: none;">
         <form id="edit-form-${product.id}-form" onsubmit="return false;">
-        <div class="mb-3">
-          <label for="edit-image-${product.id}" class="form-label">Imagen</label>
-          <input type="file" class="form-control" id="edit-image-${product.id}">
-        </div>
+          <div class="mb-3">
+            <label for="edit-image-${product.id}" class="form-label">Imagen</label>
+            <input type="file" class="form-control" id="edit-image-${product.id}">
+          </div>
           <div class="mb-3">
             <label for="edit-name-${product.id}" class="form-label">Nombre</label>
             <input type="text" class="form-control" id="edit-name-${product.id}" value="${product.name}" required>
@@ -161,7 +161,6 @@ window.ocultarFormularioEdicion = function (id) {
 };
 
 // Función para actualizar un producto
-// Función para actualizar un producto
 window.actualizarProducto = async function (id) {
   try {
     mostrarLoader(true, `product-${id}`);
@@ -172,7 +171,7 @@ window.actualizarProducto = async function (id) {
       description: document.getElementById(`edit-desc-${id}`).value,
       price: parseFloat(document.getElementById(`edit-price-${id}`).value),
       stock: parseInt(document.getElementById(`edit-stock-${id}`).value),
-      image: document.getElementById(`edit-image-${id}`).files[0] // Asegúrate de tener el campo para la imagen en el formulario
+      image: document.getElementById(`edit-image-${id}`).files[0]
     };
 
     const formData = new FormData();
@@ -213,7 +212,6 @@ window.actualizarProducto = async function (id) {
   }
 };
 
-
 // Función para actualizar la tarjeta del producto después de editar
 function actualizarCardProducto(id, productData) {
   const card = document.getElementById(`product-${id}`);
@@ -227,6 +225,70 @@ function actualizarCardProducto(id, productData) {
     const imageUrl = `http://localhost:8080/images/${productData.image}`;
     card.querySelector('.product-image').setAttribute('src', imageUrl);
   }
+}
+
+// Función para crear un nuevo producto
+window.createProduct = async function (event) {
+  event.preventDefault(); // Evitar que el formulario se envíe de forma tradicional
+
+  const newProduct = {
+    name: document.getElementById('name').value,
+    description: document.getElementById('description').value,
+    price: parseFloat(document.getElementById('price').value),
+    stock: parseInt(document.getElementById('stock').value),
+    image: document.getElementById('image').files[0],
+  };
+
+  const formData = new FormData();
+  formData.append('name', newProduct.name);
+  formData.append('description', newProduct.description);
+  formData.append('price', newProduct.price);
+  formData.append('stock', newProduct.stock);
+
+  if (newProduct.image) {
+    formData.append('image', newProduct.image);
+  }
+
+  try {
+    mostrarLoader(true);
+
+    const response = await fetch(url, {
+      method: 'POST',
+      body: formData
+    });
+
+    if (!response.ok) {
+      throw new Error('Error al crear el producto');
+    }
+
+    const product = await response.json();
+
+    // Renderizar el nuevo producto
+    const contenedor = document.getElementById('productos-container');
+    const newProductCard = crearCardProducto(product);
+    contenedor.appendChild(newProductCard);
+
+    // Limpiar el formulario
+    document.getElementById('create-product-form').reset();
+
+    // Mostrar mensaje de éxito
+    mostrarToast('Producto creado correctamente', 'success');
+
+  } catch (error) {
+    console.error('Error:', error);
+    mostrarToast('Error al crear el producto', 'danger');
+  } finally {
+    mostrarLoader(false);
+  }
+};
+
+// Añadir el event listener al formulario de creación de producto
+document.getElementById('create-product-form').addEventListener('submit', createProduct);
+
+// Función para mostrar el formulario de creación de producto
+function mostrarFormularioCreacion() {
+  const formContainer = document.getElementById('form-create-product');
+  formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
 }
 
 // Funciones auxiliares para UI
@@ -249,7 +311,6 @@ function mostrarLoader(mostrar, elementoId = null) {
 }
 
 function mostrarToast(mensaje, tipo = 'info') {
-  // Implementación básica de toast - puedes usar una librería como Bootstrap Toast
   const toastContainer = document.getElementById('toast-container') || crearToastContainer();
   const toast = document.createElement('div');
   toast.className = `toast show align-items-center text-white bg-${tipo}`;
@@ -261,7 +322,6 @@ function mostrarToast(mensaje, tipo = 'info') {
   `;
   toastContainer.appendChild(toast);
 
-  // Eliminar el toast después de 5 segundos
   setTimeout(() => toast.remove(), 5000);
 }
 

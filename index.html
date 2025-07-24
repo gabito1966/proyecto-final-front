@@ -15,9 +15,11 @@
     <nav>
       <ul class="menu d-flex list-unstyled gap-5">
         <li class="itemMenu">
-          <a href="#products" class="btn btn-light">Productos</a>
+          <a href="#productos" class="btn btn-light">Productos</a>
         </li>
-
+        <li class="itemMenu">
+          <a href="#form-create-product" class="btn btn-light" onclick="mostrarFormularioCreacion()">Crear Productos</a>
+        </li>
         <li class="itemMenu">
           <a href="#redes-sociales" class="btn btn-light">Redes Sociales</a>
         </li>
@@ -25,23 +27,57 @@
     </nav>
   </header>
 
-
   <main class="container-fluid main-content flex-fill bg-secondary text-white">
     <section class="container-fluid text-center p-2">
       <h1>E-Commerce GG</h1>
       <p>
-        Los mejores productos informaticos al mejor precio.
+        Los mejores productos informáticos al mejor precio.
       </p>
     </section>
 
+    <!-- Formulario de creación de producto -->
+    <div id="form-create-product" class="mb-4" style="display:none;">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-6">
+            <h3>Agregar Nuevo Producto</h3>
+            <form id="create-product-form" enctype="multipart/form-data">
+              <div class="mb-3">
+                <label for="image" class="form-label">Imagen</label>
+                <input type="file" class="form-control" id="image" required>
+              </div>
+              <div class="mb-3">
+                <label for="name" class="form-label">Nombre</label>
+                <input type="text" class="form-control" id="name" required>
+              </div>
+              <div class="mb-3">
+                <label for="description" class="form-label">Descripción</label>
+                <textarea class="form-control" id="description" rows="3" required></textarea>
+              </div>
+              <div class="mb-3">
+                <label for="price" class="form-label">Precio</label>
+                <input type="number" step="0.01" class="form-control" id="price" required>
+              </div>
+              <div class="mb-3">
+                <label for="stock" class="form-label">Stock</label>
+                <input type="number" class="form-control" id="stock" required>
+              </div>
+              <button type="submit" class="btn btn-primary">Crear Producto</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Sección de productos -->
     <section id="productos" class="contenedorCards container-fluid">
-      <h3 class="text-center ">Productos</h3>
+      <h3 class="text-center">Productos</h3>
       <div id="productos-container" class="d-flex flex-wrap justify-content-around gap-3">
-        <!-- Los productos serán insertados aquí -->
+        <!-- Los productos serán insertados aquí dinámicamente -->
       </div>
     </section>
   </main>
-
 
   <footer id="redes-sociales"
     class="container-fluid p-4 d-flex justify-content-center align-items-center bg-dark text-white">
