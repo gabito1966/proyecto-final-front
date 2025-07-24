@@ -172,3 +172,25 @@ img {
   print-color-adjust: exact !important;
   -webkit-print-color-adjust: exact !important;
 }
+
+.card.product-card .card-body {
+  position: relative;
+  padding-bottom: 60px; 
+}
+
+.card.product-card .product-actions {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  left: 15px;           
+  display: flex;
+  justify-content: center; 
+  gap: 10px;
+}
+
+.card.product-card .product-actions button {
+  flex: 1;             
+  max-width: 120px;    
+  text-align: center;
+}
+
